@@ -5,6 +5,7 @@ $arguments = "& '" + $myinvocation.mycommand.definition + "'"
 Start-Process powershell -Verb runAs -ArgumentList $arguments
 Break
 }
+
 # Slightly modified Shameless rip from https://www.hass.de/content/setup-microsoft-windows-or-iis-ssl-perfect-forward-secrecy-and-tls-12
 # Many thanks to Alexander Hass
 # https://gist.githubusercontent.com/jbratu/6262684939e15e638892973f5f8eed78/raw/705b534d425b2dd9e812d057132ee1bf1ecbdadd/setupiisforsslperfectforwardsecrecy_v17.ps1
