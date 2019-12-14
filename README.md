@@ -26,3 +26,43 @@ https://security.stackexchange.com/questions/142939/determine-ssl-tls-version-us
 
 https://osqa-ask.wireshark.org/questions/37528/decode-ssl-decimal-fields-in-tshark-output
 tshark -ni "Ethernet" -Y "ssl.handshake.ciphersuites"
+
+tshark -ni "Ethernet" -Y "ssl.handshake.ciphersuites" -Vx
+
+tshark -ni "Ethernet" -Y "ssl.handshake.ciphersuites" -Vx -c 100
+tshark -ni "Ethernet" -Y "ssl.handshake.ciphersuites and ip.dst==52.119.8.72" -Vx
+
+tshark -ni "Ethernet" -f "host 52.119.8.72" -Y "ssl.handshake.ciphersuites and ip.dst==52.119.8.72" -Vx -c 30
+only shows 1 packet captured
+
+
+tshark -ni "Ethernet" `
+-o "tls.desegment_ssl_records: TRUE" `
+-f "tcp port 443 and host 52.119.8.72" `
+-V -c 10
+
+
+
+tshark -ni "Ethernet" -f "host 52.119.8.72" `
+-o "ssl.desegment_ssl_records: TRUE" `
+-o "ssl.desegment_ssl_application_data: TRUE" `
+-o "ssl.keys_list:11.111.111.111,15000,http,key.pem" `
+-o "tls.debug_file:tlsdebug.log" `
+-f "tcp port 443" `
+-R "ssl" `
+-V -x
+
+
+tshark -ni "Ethernet" `
+-o "tls.desegment_ssl_records: TRUE" `
+-o "tls.desegment_ssl_application_data: TRUE" `
+-o "tls.keys_list:11.111.111.111,15000,http,key.pem" `
+-f "tcp port 443 and host 52.119.8.72" `
+-V -x
+
+PS C:\wmgt\tmp> tshark -ni "Ethernet" `
+>> -o "tls.desegment_ssl_records: TRUE" `
+>> -o "tls.desegment_ssl_application_data: FALSE" `
+>> -o "tls.keys_list:11.111.111.111,15000,http,key.pem" `
+>> -f "tcp port 443 and host 52.119.8.72" `
+>> -V -x -c 10
