@@ -1,25 +1,30 @@
+# What this does
 Simple registry suite for actions on windows registry keys:
 - backing up keys
 - updating keys
 - comparing changes to the most recent backups of keys
 
-./reg-bkp.ps1
-./reg-diff.ps1
 
-
-Keys impacted for ciphers
+## Keys impacted for ciphers
 "SCHANNEL" = "HKLM\SYSTEM\CurrentControlSet\Control\SecurityProviders\SCHANNEL"
 "SSL" = "HKLM\SOFTWARE\Policies\Microsoft\Cryptography\Configuration\SSL"
 "Wow6432Node" = "HKLM\SOFTWARE\Wow6432Node\Microsoft\.NETFramework" 
 "NETFramework" = "HKLM\SOFTWARE\Microsoft\.NETFramework"
 
-tshark
+
+# Running script
+./reg-bkp.ps1
+./reg-diff.ps1
+
+
+# Testing ciphers
+nmap -sV --script ssl-enum-ciphers -p 443 example.com  # See what ciphers your server supports
+Get-TlsCipherSuite  # Get your local ciphers
+curl.exe -v --tlsv1.1 --ciphers ECDHE-RSA-AES128-GCM-SHA256 "https://example.com"  # Test a combo
+
+
+# tshark to verify packets
 dumpcap -D -M
-
-ssl.handshake.version==0x0301
-
-curl.exe -v --sslv3 https://example.com
-curl.exe -v --tlsv1.0 https://example.com
 
 0x00000300 = sslv3
 0x00000301 = tlsv1.0
@@ -34,7 +39,20 @@ Capturing on 'Ethernet'
 72      10.1.1.105      0x00000303
 139     10.1.1.105      0x00000301
 
+
+## Deeper packet inspection with a count of 10 
 tshark -ni "Ethernet" `                                                                                                 -o "tls.desegment_ssl_records: TRUE" `                                                                                  -f "tcp port 443 and host 93.184.216.34" `                                                                                -V -c 10   
+
+
+
+
+# Even More Stuff
+
+ssl.handshake.version==0x0301
+
+curl.exe -v --sslv3 https://example.com
+curl.exe -v --tlsv1.0 https://example.com
+
 
 
  tshark -ni "Ethernet" -T fields -Y tls.handshake.type==2 -e tls.handshake.extensions.supported_version -e tls.handshake.version
