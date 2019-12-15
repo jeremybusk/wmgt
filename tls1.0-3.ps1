@@ -291,6 +291,8 @@ if (Test-Path 'HKLM:\SOFTWARE\Wow6432Node') {
 # 0x00000200                              512  Enable TLS 1.1 by default
 # 0x00000800                             2048  Enable TLS 1.2 by default
 $defaultSecureProtocols = @(
+  '128',  # TLS 1.0
+  '512',  # TLS 1.1
   '2048'  # TLS 1.2
 )
 $defaultSecureProtocolsSum = ($defaultSecureProtocols | Measure-Object -Sum).Sum
