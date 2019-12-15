@@ -85,3 +85,17 @@ PS C:\wmgt\tmp> tshark -ni "Ethernet" `
 >> -o "tls.keys_list:11.111.111.111,15000,http,key.pem" `
 >> -f "tcp port 443 and host 93.184.216.34" `
 >> -V -x -c 10
+
+http://blog.fourthbit.com/2014/12/23/traffic-analysis-of-an-ssl-slash-tls-session/
+  Handshake Type Values    dec      hex
+   -------------------------------------
+   HELLO_REQUEST              0     0x00
+   CLIENT_HELLO               1     0x01
+   SERVER_HELLO               2     0x02
+   CERTIFICATE               11     0x0b
+   SERVER_KEY_EXCHANGE       12     0x0c
+   CERTIFICATE_REQUEST       13     0x0d
+   SERVER_DONE               14     0x0e
+   CERTIFICATE_VERIFY        15     0x0f
+   CLIENT_KEY_EXCHANGE       16     0x10
+   FINISHED                  20     0x14

@@ -1,3 +1,4 @@
+# Enable TLS 1.2 & 1.1 on client/server
 If (-NOT ([Security.Principal.WindowsPrincipal][Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole([Security.Principal.WindowsBuiltInRole] "Administrator"))
 
 {   
@@ -76,10 +77,12 @@ Write-Host 'TLS 1.0 has been disabled.'
 # New-ItemProperty -path 'HKLM:\SYSTEM\CurrentControlSet\Control\SecurityProviders\SCHANNEL\Protocols\TLS 1.1\Client' -name 'DisabledByDefault' -value 1 -PropertyType 'DWord' -Force | Out-Null
 # Write-Host 'TLS 1.1 has been disabled.'
 
-# Add/Enable TLS 1.1 for client and server SCHANNEL communications for Lync 2010 Client/Server
+# Add/Enable TLS 1.1 for server SCHANNEL communications for Lync 2010 Client/Server !!!!!!We will probably want change
 New-Item 'HKLM:\SYSTEM\CurrentControlSet\Control\SecurityProviders\SCHANNEL\Protocols\TLS 1.1\Server' -Force | Out-Null
 New-ItemProperty -path 'HKLM:\SYSTEM\CurrentControlSet\Control\SecurityProviders\SCHANNEL\Protocols\TLS 1.1\Server' -name 'Enabled' -value '1' -PropertyType 'DWord' -Force | Out-Null
 New-ItemProperty -path 'HKLM:\SYSTEM\CurrentControlSet\Control\SecurityProviders\SCHANNEL\Protocols\TLS 1.1\Server' -name 'DisabledByDefault' -value 0 -PropertyType 'DWord' -Force | Out-Null
+
+# Add/Enable TLS 1.1 for client SCHANNEL communications for Lync 2010 Client/Server
 New-Item 'HKLM:\SYSTEM\CurrentControlSet\Control\SecurityProviders\SCHANNEL\Protocols\TLS 1.1\Client' -Force | Out-Null
 New-ItemProperty -path 'HKLM:\SYSTEM\CurrentControlSet\Control\SecurityProviders\SCHANNEL\Protocols\TLS 1.1\Client' -name 'Enabled' -value '1' -PropertyType 'DWord' -Force | Out-Null
 New-ItemProperty -path 'HKLM:\SYSTEM\CurrentControlSet\Control\SecurityProviders\SCHANNEL\Protocols\TLS 1.1\Client' -name 'DisabledByDefault' -value 0 -PropertyType 'DWord' -Force | Out-Null
@@ -145,7 +148,7 @@ $secureHashes = @(
 )
 Foreach ($secureHash in $secureHashes) {
   $key = (Get-Item HKLM:\).OpenSubKey('SYSTEM\CurrentControlSet\Control\SecurityProviders\SCHANNEL\Hashes', $true).CreateSubKey($secureHash)
-  New-ItemProperty -path "HKLM:\SYSTEM\CurrentControlSet\Control\SecurityProviders\SCHANNEL\Hashes\$secureHash" -name 'Enabled' -value '0xffffffff' -PropertyType 'DWord' -Force | Out-Null
+  New-ItemProperty -path "HKLM:\SYSTEM\CurrentControlSet\Control\SecurityProviders\SCHANNEL\Hashes\$secureHash" -name 'Enabled' -value '1' -PropertyType 'DWord' -Force | Out-Null
   $key.close()
   Write-Host "Hash $secureHash has been enabled."
 }
@@ -159,7 +162,7 @@ $secureKeyExchangeAlgorithms = @(
 )
 Foreach ($secureKeyExchangeAlgorithm in $secureKeyExchangeAlgorithms) {
   $key = (Get-Item HKLM:\).OpenSubKey('SYSTEM\CurrentControlSet\Control\SecurityProviders\SCHANNEL\KeyExchangeAlgorithms', $true).CreateSubKey($secureKeyExchangeAlgorithm)
-  New-ItemProperty -path "HKLM:\SYSTEM\CurrentControlSet\Control\SecurityProviders\SCHANNEL\KeyExchangeAlgorithms\$secureKeyExchangeAlgorithm" -name 'Enabled' -value '0xffffffff' -PropertyType 'DWord' -Force | Out-Null
+  New-ItemProperty -path "HKLM:\SYSTEM\CurrentControlSet\Control\SecurityProviders\SCHANNEL\KeyExchangeAlgorithms\$secureKeyExchangeAlgorithm" -name 'Enabled' -value '1' -PropertyType 'DWord' -Force | Out-Null
   $key.close()
   Write-Host "KeyExchangeAlgorithm $secureKeyExchangeAlgorithm has been enabled."
 }
@@ -214,7 +217,9 @@ if ([System.Version]$os.Version -lt [System.Version]'10.0') {
     'TLS_RSA_WITH_AES_256_CBC_SHA256',
     'TLS_RSA_WITH_AES_128_CBC_SHA256',
     'TLS_RSA_WITH_AES_256_CBC_SHA',
-    'TLS_RSA_WITH_AES_128_CBC_SHA'
+    'TLS_RSA_WITH_AES_128_CBC_SHA',
+    'TLS_DHE_RSA_WITH_AES_128_CBC_SHA',
+    'TLS_DHE_RSA_WITH_AES_256_CBC_SHA'
   )
 } else {
   Write-Host 'Use cipher suites order for Windows 10/2016 and later.'
@@ -255,7 +260,9 @@ if ([System.Version]$os.Version -lt [System.Version]'10.0') {
     'TLS_PSK_WITH_AES_256_GCM_SHA384',
     'TLS_PSK_WITH_AES_128_GCM_SHA256',
     'TLS_PSK_WITH_AES_256_CBC_SHA384',
-    'TLS_PSK_WITH_AES_128_CBC_SHA256'
+    'TLS_PSK_WITH_AES_128_CBC_SHA256',
+    'TLS_DHE_RSA_WITH_AES_128_CBC_SHA',
+    'TLS_DHE_RSA_WITH_AES_256_CBC_SHA'
   )
 }
 $cipherSuitesAsString = [string]::join(',', $cipherSuitesOrder)
