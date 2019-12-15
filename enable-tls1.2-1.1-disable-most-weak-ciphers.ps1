@@ -1,12 +1,13 @@
-# Slightly modified Shameless rip from https://www.hass.de/content/setup-microsoft-windows-or-iis-ssl-perfect-forward-secrecy-and-tls-12
+# Modified shameless rip from https://www.hass.de/content/setup-microsoft-windows-or-iis-ssl-perfect-forward-secrecy-and-tls-12
 # Many thanks to Alexander Hass
 # https://gist.githubusercontent.com/jbratu/6262684939e15e638892973f5f8eed78/raw/705b534d425b2dd9e812d057132ee1bf1ecbdadd/setupiisforsslperfectforwardsecrecy_v17.ps1
+
 # After running this script the computer only supports:
-# - TLS 1.2
-#
-# Version 3.0.1, see CHANGELOG.txt for changes.
- 
-Write-Host 'Configuring IIS with SSL/TLS Deployment Best Practices...'
+# - TLS 1.2, 1.1, 1.0
+# Using 0xffffffff vs 1 in registry:
+# Even if property type is not binary it seems to still work. There are documents supporting both. :( 
+
+Write-Host 'Configuring Client/Server SSL/TLS to use stronger ciphers ... but alloying for Lync 2010' 
 Write-Host '--------------------------------------------------------------------------------'
  
 # Disable Multi-Protocol Unified Hello
@@ -225,6 +226,8 @@ if ([System.Version]$os.Version -lt [System.Version]'10.0') {
   #   'TLS_ECDHE_ECDSA_WITH_AES_256_CBC_SHA',
   #   'TLS_ECDHE_ECDSA_WITH_AES_128_CBC_SHA'
   # )
+
+  # Top 4 ciphers here are to suport artifacts/lync
   $cipherSuitesOrder = @(
     'TLS_RSA_WITH_3DES_EDE_CBC_SHA',
     'TLS_RSA_WITH_AES_256_CBC_SHA',
