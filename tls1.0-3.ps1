@@ -167,11 +167,11 @@ Foreach ($secureKeyExchangeAlgorithm in $secureKeyExchangeAlgorithms) {
 # Microsoft Security Advisory 3174644 - Updated Support for Diffie-Hellman Key Exchange
 # https://docs.microsoft.com/en-us/security-updates/SecurityAdvisories/2016/3174644
 Write-Host 'Configure longer DHE key shares for TLS servers.'
-New-ItemProperty -path "HKLM:\SYSTEM\CurrentControlSet\Control\SecurityProviders\SCHANNEL\KeyExchangeAlgorithms\Diffie-Hellman" -name 'ServerMinKeyBitLength' -value '2048' -PropertyType 'DWord' -Force | Out-Null
-New-ItemProperty -path "HKLM:\SYSTEM\CurrentControlSet\Control\SecurityProviders\SCHANNEL\KeyExchangeAlgorithms\Diffie-Hellman" -name 'ClientMinKeyBitLength' -value '2048' -PropertyType 'DWord' -Force | Out-Null
+New-ItemProperty -path "HKLM:\SYSTEM\CurrentControlSet\Control\SecurityProviders\SCHANNEL\KeyExchangeAlgorithms\Diffie-Hellman" -name 'ServerMinKeyBitLength' -value '1024' -PropertyType 'DWord' -Force | Out-Null
+New-ItemProperty -path "HKLM:\SYSTEM\CurrentControlSet\Control\SecurityProviders\SCHANNEL\KeyExchangeAlgorithms\Diffie-Hellman" -name 'ClientMinKeyBitLength' -value '1024' -PropertyType 'DWord' -Force | Out-Null
  
 # https://support.microsoft.com/en-us/help/3174644/microsoft-security-advisory-updated-support-for-diffie-hellman-key-exc
-New-ItemProperty -path "HKLM:\SYSTEM\CurrentControlSet\Control\SecurityProviders\SCHANNEL\KeyExchangeAlgorithms\PKCS" -name 'ClientMinKeyBitLength' -value '2048' -PropertyType 'DWord' -Force | Out-Null
+New-ItemProperty -path "HKLM:\SYSTEM\CurrentControlSet\Control\SecurityProviders\SCHANNEL\KeyExchangeAlgorithms\PKCS" -name 'ClientMinKeyBitLength' -value '1024' -PropertyType 'DWord' -Force | Out-Null
  
 # Set cipher suites order as secure as possible (Enables Perfect Forward Secrecy).
 $os = Get-WmiObject -class Win32_OperatingSystem
