@@ -11,8 +11,11 @@ if (-NOT ([Security.Principal.WindowsPrincipal][Security.Principal.WindowsIdenti
 
 # After running this script the computer only supports:
 # - TLS 1.2, 1.1, 1.0
-# Using 0xffffffff vs 1 in registry:
-# Even if property type is not binary it seems to still work. There are documents supporting both. :( 
+# Using 0xffffffff vs 1 in registry - USE 0xffffffff !!!
+# 0xffffffff is hexidecimal notation. 
+# It translates in decimal notation to 4294967295, and basically means "every possible value is acceptable." 
+# 0x0 is also hexidecimal notation, for a value of "0" in decimal format
+# There are documents supporting both. Another terrible documentation by MS. Needs 0xffffffff to work, needs multi value :( 
 
 Write-Host 'Configuring Client/Server SSL/TLS to use stronger ciphers ... but alloying for Lync 2010' 
 Write-Host '--------------------------------------------------------------------------------'
