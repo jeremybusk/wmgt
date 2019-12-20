@@ -17,6 +17,9 @@ if (-NOT ([Security.Principal.WindowsPrincipal][Security.Principal.WindowsIdenti
 # It translates in decimal notation to 4294967295, and basically means "every possible value is acceptable." 
 # 0x0 is also hexidecimal notation, for a value of "0" in decimal format
 # There are documents supporting both. Another terrible documentation by MS. Needs 0xffffffff to work, needs multi value :( 
+# https://github.com/dpaulson45/HealthChecker/issues/220
+# https://support.microsoft.com/en-us/help/245030/how-to-restrict-the-use-of-certain-cryptographic-algorithms-and-protoc
+# https://docs.microsoft.com/en-us/windows-server/security/tls/tls-registry-settings#tls-12
 
 
 Write-Host 'Configuring Client/Server SSL/TLS to use stronger ciphers ... but alloying for Lync 2010' 
