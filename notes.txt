@@ -1,0 +1,13 @@
+function new-user {
+[CmdletBinding()]
+param (
+[string]$username
+)
+if (-not (Get-LocalUser -Name $username -ErrorAction SilentlyContinue)){
+$pwd = Read-Host -Prompt “Password” -AsSecureString
+New-LocalUser -Name $username -Password $pwd
+}
+else {
+Write-Warning -Message “User:$username already exists”
+}
+}
